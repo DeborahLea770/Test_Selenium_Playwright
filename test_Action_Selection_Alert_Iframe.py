@@ -44,18 +44,43 @@ def test_drag_drop():
 
 
 def test_iframe():
+    my_email = 'd2@gmail.com'
+    my_password = 'D123456'
+    my_account = 'deborah fellous'
     driver = webdriver.Chrome(chrom_driver_path, chrome_options=chrome_options)
     driver.get('http://automationpractice.com/index.php')
     driver.set_window_size(800, 800)
-    mylogger.info("test for ifram")
-    wait_driver = WebDriverWait(driver, 15)
+    mylogger.info("test for iframe")
     container = driver.find_element(By.CLASS_NAME, "product-container")
     container.find_element(By.CLASS_NAME, 'icon-eye-open').click()
-    wait_driver.until(EC.frame_to_be_available_and_switch_to_it((By.CLASS_NAME, "fancybox-iframe")))
+    driver.switch_to.frame(driver.find_element(By.CLASS_NAME, "fancybox-iframe"))
     time.sleep(5)
-    add_to_card_btn = driver.find_element(By.ID, "add_to_card")
-    add_to_card_btn.click()
+    add_to_card = driver.find_element(By.ID, "add_to_cart")
+    add_to_card.click()
     time.sleep(5)
+    button = driver.find_element(By.CLASS_NAME, "button-container")
+    button.find_element(By.CLASS_NAME, "btn.btn-default.button.button-medium").click()
+    time.sleep(5)
+    button = driver.find_element(By.CLASS_NAME, "cart_navigation.clearfix")
+    button.find_element(By.CLASS_NAME, "button.btn.btn-default.standard-checkout.button-medium").click()
+    time.sleep(5)
+    driver.find_element(By.ID, "email").send_keys(my_email)
+    driver.find_element(By.ID, "passwd").send_keys(my_password)
+    driver.find_element(By.CLASS_NAME, "icon-lock").click()
+    time.sleep(3)
+    driver.find_element(By.CSS_SELECTOR, '[name=processAddress]').click()
+    time.sleep(2)
+    driver.find_element(By.CSS_SELECTOR, '[type=checkbox]').click()
+    time.sleep(2)
+    driver.find_element(By.CSS_SELECTOR, '[name=processCarrier]').click()
+    time.sleep(2)
+    driver.find_element(By.CLASS_NAME, "bankwire").click()
+    time.sleep(2)
+    driver.find_element(By.CSS_SELECTOR, "button.button-medium").click()
+    time.sleep(2)
+    comp = driver.find_element(By.CLASS_NAME, "cheque-indent").find_element(By.CLASS_NAME, "dark")
+    assert "Your order on My Store is complete." in comp.text
+    driver.close()
 
 
 def test_alerts():
